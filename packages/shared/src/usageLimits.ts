@@ -430,6 +430,14 @@ export interface LimitPool {
   readonly windows: readonly LimitPoolWindow[];
 }
 
+/** A pool of one account reads better under that account's name than its driver's. */
+export function limitPoolDisplayName(pool: Pick<LimitPool, "accounts">): string | undefined {
+  const [first] = pool.accounts;
+  const name = first?.displayName;
+  if (!name) return undefined;
+  return pool.accounts.every((account) => account.displayName === name) ? name : undefined;
+}
+
 export function displayLimitWindows(pool: LimitPool) {
   if (pool.driver === "antigravity") {
     return [...pool.windows].sort(

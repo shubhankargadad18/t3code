@@ -9,6 +9,7 @@ import {
   collectLimitPools,
   cursorUsageWindowDetails,
   displayLimitWindows,
+  limitPoolDisplayName,
   formatResetsIn,
   paceRemainingPercent,
   remainingPercent,
@@ -453,7 +454,7 @@ export function UsageLimitsSection({
               <View className="flex-row items-center gap-2 px-1">
                 <ProviderIcon provider={pool.driver} size={18} />
                 <Text className="text-base font-t3-medium text-foreground">
-                  {DRIVER_LABEL[pool.driver] ?? pool.driver}
+                  {limitPoolDisplayName(pool) ?? DRIVER_LABEL[pool.driver] ?? pool.driver}
                 </Text>
               </View>
               {windows.map((window) => {

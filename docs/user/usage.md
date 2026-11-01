@@ -145,6 +145,10 @@ Grok reports the remaining subscription allowance and reset time for its current
 after signing in with `grok login`. Explicit `XAI_API_KEY` connections and custom authentication
 or endpoint configurations do not report subscription limits.
 
+Command Code reports its five-hour and weekly spend windows using the Command Code login saved on
+the server, or `COMMAND_CODE_API_KEY` in the instance's environment variables. A local-only BYOK
+run (`CMD_LOCAL_ONLY`) never reaches Command Code, so it reports no limits.
+
 API-key accounts may not report subscription limits. This also applies to Claude connections
 using a proxy through `ANTHROPIC_AUTH_TOKEN`.
 
