@@ -452,7 +452,11 @@ export function UsageLimitsSection({
             {index === cursorPromptAt ? cursorPrompt : null}
             <View className="gap-3">
               <View className="flex-row items-center gap-2 px-1">
-                <ProviderIcon provider={pool.driver} size={18} />
+                <ProviderIcon
+                  provider={pool.driver}
+                  displayName={limitPoolDisplayName(pool)}
+                  size={18}
+                />
                 <Text className="text-base font-t3-medium text-foreground">
                   {limitPoolDisplayName(pool) ?? DRIVER_LABEL[pool.driver] ?? pool.driver}
                 </Text>
@@ -568,7 +572,11 @@ export function UsageLimitAccountScreen({ route }: AccountScreenProps) {
           <>
             <View className="gap-2">
               <View className="flex-row items-center gap-2">
-                <ProviderIcon provider={account.driver} size={24} />
+                <ProviderIcon
+                  provider={account.driver}
+                  displayName={account.displayName}
+                  size={24}
+                />
                 <Text className="flex-1 text-xl font-t3-bold text-foreground">
                   {account.displayName ?? DRIVER_LABEL[account.driver] ?? account.driver}
                 </Text>

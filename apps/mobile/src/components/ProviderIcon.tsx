@@ -16,8 +16,12 @@ import { getProviderClient } from "@t3tools/client-runtime/provider-clients";
 type ProviderIconProps = {
   readonly provider: string | null | undefined;
   readonly iconUrl?: string | null | undefined;
+  readonly displayName?: string | null | undefined;
   readonly size?: number;
 };
+
+/** A local ACP command reports no agent id, so the instance name is the only signal left. */
+const COMMAND_CODE_NAME = /(?:^|[^a-z])command[\s_-]?code(?:[^a-z]|$)/i;
 
 function AcpRegistryFallbackIcon(props: { readonly color: string; readonly size: number }) {
   return (
@@ -80,6 +84,20 @@ export function ProviderIcon(props: ProviderIconProps) {
       <Image
         source={require("../../assets/antigravity.png")}
         style={{ width: size, height: size }}
+        contentFit="contain"
+      />
+    );
+  }
+  if (
+    props.provider?.trim().toLowerCase() === "commandcode" ||
+    (props.provider === "acpRegistry" &&
+      typeof props.displayName === "string" &&
+      COMMAND_CODE_NAME.test(props.displayName))
+  ) {
+    return (
+      <Image
+        source={require("../../assets/commandcode.png")}
+        style={{ width: size, height: size, borderRadius: size * 0.23 }}
         contentFit="contain"
       />
     );

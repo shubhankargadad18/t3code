@@ -8,6 +8,7 @@ import {
 
 import { ProviderDriverKind } from "@t3tools/contracts";
 import { AntigravityIcon, ClaudeAI, Icon, OpenAI } from "../Icons";
+import { CommandCodeIcon } from "../CommandCodeIcon";
 
 import { cn } from "~/lib/utils";
 import { providerClients } from "../settings/providerDriverMeta";
@@ -57,6 +58,18 @@ export function resolveProviderInstanceAcpRegistryIconUrl(input: {
   );
 }
 
+/** A local ACP command reports no agent id, so the instance name is the only signal left. */
+const COMMAND_CODE_NAME = /(?:^|[^a-z])command[\s_-]?code(?:[^a-z]|$)/i;
+
+function isCommandCodeInstance(input: {
+  readonly displayName: string;
+  readonly acpRegistryAgentId?: string | undefined;
+}): boolean {
+  const agentId = input.acpRegistryAgentId?.trim().toLowerCase();
+  if (agentId === "command-code" || agentId === "commandcode") return true;
+  return COMMAND_CODE_NAME.test(input.displayName);
+}
+
 export const ProviderInstanceIcon = memo(function ProviderInstanceIcon(props: {
   driverKind: ProviderDriverKind;
   displayName: string;
@@ -84,6 +97,8 @@ export const ProviderInstanceIcon = memo(function ProviderInstanceIcon(props: {
   const badgeContent = props.badgeContent ?? "initials";
   const iconClassName = cn(props.size === "compact" && "size-3.5", props.iconClassName);
   const isAcpRegistry = props.driverKind === "acpRegistry";
+  // Command Code runs as a local ACP command, so its identity has to come from the instance.
+  const isCommandCode = isAcpRegistry && isCommandCodeInstance(props);
   const acpRegistryIconUrl = resolveProviderInstanceAcpRegistryIconUrl({
     driverKind: props.driverKind,
     agentId: props.acpRegistryAgentId,
@@ -99,7 +114,9 @@ export const ProviderInstanceIcon = memo(function ProviderInstanceIcon(props: {
       style={accentStyle}
       data-provider-accent-color={accentColor}
     >
-      {isAcpRegistry ? (
+      {isCommandCode ? (
+        <CommandCodeIcon className={cn("size-5", iconClassName)} />
+      ) : isAcpRegistry ? (
         <AcpRegistryAgentIcon
           className={cn("size-5 rounded-none bg-transparent", iconClassName)}
           fallbackClassName="size-full"
